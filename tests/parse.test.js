@@ -1,20 +1,37 @@
 const assert = require("node:assert");
 const test = require("node:test");
 
-// runtime `instanceof HTMLElement` checks in the library don't throw.
-if (typeof globalThis.HTMLElement === "undefined") {
-  class FakeHTMLElement {
-    constructor() {
-      this.classList = { add() {} };
-      this.style = { setProperty() {} };
+/** ------  HELPERS --------  */
+function ensureHTMLElementShim() {
+  if (typeof globalThis.HTMLElement === "undefined") {
+    class FakeHTMLElement {
+      constructor() {
+        this.classList = { add() {} };
+        this.style = { setProperty() {} };
+      }
+      querySelector() {
+        return null;
+      }
+      appendChild() {}
     }
+    globalThis.HTMLElement = FakeHTMLElement;
+  }
+}
+
+function createFakeContainer(overrides = {}) {
+  const base = {
+    classList: { add() {} },
     querySelector() {
       return null;
-    }
-    appendChild() {}
-  }
-  globalThis.HTMLElement = FakeHTMLElement;
+    },
+    appendChild() {},
+    style: { setProperty() {} },
+  };
+  return Object.assign(base, overrides || {});
 }
+/** ------  END HELPERS --------  */
+
+ensureHTMLElementShim();
 
 const pkg = require("..");
 const { parser, ChronosTimeline, parseChronos } = pkg;
@@ -157,17 +174,7 @@ test("Parse — Happy path and invocations", async (t) => {
   await t.test(
     "INSTANCE: ChronosTimeline instance parser.parse returns expected shape",
     () => {
-      // Provide options object to constructor so it sets settings and parser
-      // Use a minimal fake HTMLElement-like object so the class can safely
-      // call DOM-ish methods if any are accessed during tests.
-      const fakeContainer = {
-        classList: { add() {} },
-        querySelector() {
-          return null;
-        },
-        appendChild() {},
-        style: { setProperty() {} },
-      };
+      const fakeContainer = createFakeContainer();
 
       const timeline = new ChronosTimeline({
         container: fakeContainer,
