@@ -21,6 +21,7 @@ import {
   templateAdvanced,
 } from "../ui/snippets";
 import { systemPrompt } from "../utils/prompts";
+import { CHRONOS_DEFAULT_CSS } from "../ui/defaultStyles";
 
 const MS_UNTIL_REFIT = 100;
 
@@ -103,6 +104,60 @@ export class ChronosTimeline {
     // Initialize tooltip setter: prefer injected callback, fallback to local helper
     this.setTooltip =
       (this.callbacks && this.callbacks.setTooltip) || setTooltipFallback;
+
+    // Ensure default styles are attached for this container/document.
+    this._attachStylesIfMissing();
+  }
+
+  // Ensure default styles are attached to the container's document (best-effort).
+  private _attachStylesIfMissing() {
+    try {
+      const doc =
+        (this.container && (this.container as any).ownerDocument) ||
+        (typeof document !== "undefined" ? document : undefined);
+
+      const themeConfig = this.settings?.theme;
+      const cssVars = themeConfig?.cssVariables;
+      const disableDefaultStyles = themeConfig?.disableDefaultStyles;
+
+      if (doc) {
+        if (disableDefaultStyles) {
+          if (cssVars) {
+            const existingCustomStyle = doc.querySelector(
+              'style[data-chronos-custom="1"]'
+            );
+            if (!existingCustomStyle) {
+              const style = doc.createElement("style");
+              style.setAttribute("data-chronos-custom", "1");
+              const vars = Object.entries(cssVars)
+                .map(([k, v]) => `  --${k}: ${v};`)
+                .join("\n");
+              style.textContent = `:root {\n${vars}\n}`;
+              doc.head && doc.head.appendChild(style);
+            }
+          }
+        } else {
+          const existingStyle = doc.querySelector(
+            'style[data-chronos-core="1"]'
+          );
+          if (!existingStyle) {
+            const style = doc.createElement("style");
+            style.setAttribute("data-chronos-core", "1");
+            let finalCss = CHRONOS_DEFAULT_CSS;
+            if (cssVars) {
+              const vars = Object.entries(cssVars)
+                .map(([k, v]) => `  --${k}: ${v};`)
+                .join("\n");
+              finalCss = `:root {\n${vars}\n}\n` + finalCss;
+            }
+            style.textContent = finalCss;
+            doc.head && doc.head.appendChild(style);
+          }
+        }
+      }
+    } catch (e) {
+      // best-effort
+    }
   }
 
   // Static render method for Method 1: ChronosTimeline.render(container, source, options)
@@ -176,6 +231,55 @@ export class ChronosTimeline {
     groups: Group[];
     flags: any;
   }) {
+    // Ensure default styles are attached to the correct document (useful when
+    // hosts render inside iframes or when consumer didn't call attachChronosStyles).
+    try {
+      const doc =
+        (this.container && (this.container as any).ownerDocument) ||
+        (typeof document !== "undefined" ? document : undefined);
+
+      const themeConfig = this.settings?.theme;
+      const cssVars = themeConfig?.cssVariables;
+      const disableDefaultStyles = themeConfig?.disableDefaultStyles;
+
+      if (doc) {
+        if (disableDefaultStyles) {
+          if (cssVars) {
+            const existingCustomStyle = doc.querySelector(
+              'style[data-chronos-custom="1"]'
+            );
+            if (!existingCustomStyle) {
+              const style = doc.createElement("style");
+              style.setAttribute("data-chronos-custom", "1");
+              const vars = Object.entries(cssVars)
+                .map(([k, v]) => `  --${k}: ${v};`)
+                .join("\n");
+              style.textContent = `:root {\n${vars}\n}`;
+              doc.head && doc.head.appendChild(style);
+            }
+          }
+        } else {
+          const existingStyle = doc.querySelector(
+            'style[data-chronos-core="1"]'
+          );
+          if (!existingStyle) {
+            const style = doc.createElement("style");
+            style.setAttribute("data-chronos-core", "1");
+            let finalCss = CHRONOS_DEFAULT_CSS;
+            if (cssVars) {
+              const vars = Object.entries(cssVars)
+                .map(([k, v]) => `  --${k}: ${v};`)
+                .join("\n");
+              finalCss = `:root {\n${vars}\n}\n` + finalCss;
+            }
+            style.textContent = finalCss;
+            doc.head && doc.head.appendChild(style);
+          }
+        }
+      }
+    } catch (e) {
+      // swallow — style injection is a best-effort convenience
+    }
     // Add the chronos-timeline-container class to the container
     this.container.classList.add("chronos-timeline-container");
 

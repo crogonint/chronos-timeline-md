@@ -378,6 +378,47 @@ npm run playground
 npm run clean
 ```
 
+### Local dev with sym link
+
+If modifying the underlying `chronos-timeline-md` locally and want live changes refelcted:
+
+```sh
+# expose local chronos-timeline-md
+cd ~/path/to/local/chronos-timeline-md
+npm install
+npm link
+npm run dev # start watch mode
+```
+
+```sh
+# consume library in plugin
+cd ~/path/to/local/obsidian-plugin
+npm install
+npm link chronos-timeline-md
+npm run dev
+```
+
+To check which module (npm or local sym link) your plugin is currently using:
+
+```sh
+readlink node_modules/chronos-timeline-md
+
+# or
+
+npm ls chronos-timeline-md --depth=0
+
+# if linked, npm often shows an arrow or a path. If installed from the registry it shows the version (e.g., chronos-timeline-md@1.0.8)
+
+```
+
+Unlinking
+
+```sh
+npm unlink chronos-timeline-md
+# then reinstall from registry
+npm install
+```
+
 ### Publishing
 
 (Note to self :P)

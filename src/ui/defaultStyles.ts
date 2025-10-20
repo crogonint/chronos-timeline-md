@@ -46,17 +46,17 @@ export const CHRONOS_DEFAULT_CSS = `
 }
 
 .chronos-timeline-container .chronos-timeline-refit-button {
-  position: absolute;
-  bottom: 2px;
-  right: 5px;
-  padding: 2px 5px;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: var(--chronos-radius-small);
-  cursor: pointer;
-  z-index: 99;
-  color: var(--chronos-icon-color);
+	position: absolute;
+	bottom: 2px;
+	right: 5px;
+	padding: 2px 5px;
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 5px;
+	cursor: pointer;
+	z-index: 99;
+	color: var(--chronos-icon-color);
 }
 
 .chronos-timeline-container .chronos-timeline-refit-button:hover {
@@ -76,62 +76,63 @@ export const CHRONOS_DEFAULT_CSS = `
 }
 
 .vis-timeline {
-  border: 2px solid transparent !important;
-  border-radius: 0 !important;
+  border: 2px solid transparent;
+  border-radius: 0;
   cursor: default;
 }
 
 .vis-timeline.vis-active {
-  border-color: var(--chronos-border-active) !important;
-  border-radius: 0 !important;
+  border-color: var(--chronos-border-active);
+  border-radius: 0;
 }
 
 .vis-label {
-  color: var(--chronos-text-muted) !important;
+  color: var(--chronos-text-muted);
 }
 
 .vis-custom-time,
 .vis-custom-time-marker {
-  color: var(--chronos-text-on-accent) !important;
-  background-color: var(--chronos-text-normal) !important;
+  color: var(--chronos-text-on-accent);
+  background-color: var(--chronos-text-normal);
 }
 
 .chronos-timeline-container .vis-item.vis-background {
   background-color: var(--chronos-accent-alpha);
-  z-index: 1 !important;
+  z-index: 1;
 }
 
 .chronos-timeline-container .vis-item.vis-background .vis-item-content {
-  color: var(--chronos-bg-text) !important;
+  color: var(--chronos-bg-text);
 }
 
 /* Ensure points and events appear above background periods */
 .chronos-timeline-container .vis-item.vis-point {
-  z-index: 10 !important;
-  pointer-events: auto !important;
+  z-index: 10;
+  pointer-events: auto;
+  border: none;
 }
 
 .chronos-timeline-container .vis-item.vis-box,
 .chronos-timeline-container .vis-item.vis-range {
-  z-index: 5 !important;
-  pointer-events: auto !important;
+  z-index: 5;
+  pointer-events: auto;
 }
 
 /* Ensure item content is hoverable */
 .chronos-timeline-container .vis-item-content {
-  pointer-events: auto !important;
+  pointer-events: auto;
   position: relative;
   z-index: inherit;
 }
 
 .chronos-timeline-container .vis-item.vis-selected {
   border-color: var(--chronos-interactive-hover);
-  background-color: var(--chronos-interactive-hover) !important;
-  color: var(--chronos-text-on-accent) !important;
+  background-color: var(--chronos-interactive-hover);
+  color: var(--chronos-text-on-accent);
 }
 
 .chronos-timeline-container .vis-item {
-  border-radius: var(--chronos-radius-small) !important;
+  border-radius: var(--chronos-radius-small);
   border-color: var(--chronos-accent);
 }
 
@@ -141,47 +142,47 @@ export const CHRONOS_DEFAULT_CSS = `
   border-color: transparent;
   background-color: var(--chronos-interactive);
   color: var(--chronos-text-on-accent);
-  z-index: 5 !important;
-  pointer-events: auto !important;
+  z-index: 5;
+  pointer-events: auto;
 }
 
 .chronos-timeline-container .vis-range.with-caps {
-  border-radius: 50px !important;
+  border-radius: 50px;
   padding-left: 8px;
 }
 
 /* Link styles */
 .chronos-timeline-container .is-link {
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 .chronos-timeline-container .is-link .vis-item-content {
-  text-transform: none !important;
-  text-decoration: underline !important;
-  text-decoration-line: underline !important;
-  text-decoration-style: solid !important;
-  text-decoration-color: currentColor !important;
-  text-underline-offset: 5px !important;
+  text-transform: none;
+  text-decoration: underline;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: currentColor;
+  text-underline-offset: 5px;
 }
 
 .chronos-timeline-container .vis-item-content {
-  text-decoration: inherit !important;
+  text-decoration: inherit;
 }
 
 .chronos-timeline-container .vis-point {
   cursor: default;
-  z-index: 10 !important;
-  pointer-events: auto !important;
+  z-index: 10;
+  pointer-events: auto;
 }
 
 .chronos-timeline-container .vis-text {
-  color: var(--chronos-text-muted) !important;
+  color: var(--chronos-text-muted);
 }
 
 .chronos-timeline-container .vis-dot,
 .chronos-timeline-container .vis-line {
-  background-color: var(--chronos-interactive) !important;
-  color: var(--chronos-interactive) !important;
+  background-color: var(--chronos-interactive);
+  color: var(--chronos-interactive);
 }
 
 .vis-custom-time[title]::after {

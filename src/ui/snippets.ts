@@ -304,4 +304,10 @@ Use the \`> DEFAULTVIEW start|end\` flag to specify default start and end dates 
 - \`#purple\`
 - \`#pink\`
 - \`#cyan\`
+
+You can also use valid six-digit color hexcodes. Upper or lowercase is fine.
+example (Lavendar): 
+- #A379C9
+- #a379c9
+
 `;
