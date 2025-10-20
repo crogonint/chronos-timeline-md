@@ -9,6 +9,10 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "node": {
+        "import": "./dist/index.js",
+        "require": "./dist/cjs-entry.cjs"
+      },
       "import": "./dist/index.js",
       "require": "./dist/cjs-entry.cjs",
       "default": "./dist/index.js"
