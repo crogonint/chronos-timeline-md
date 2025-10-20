@@ -12,6 +12,9 @@ export default defineConfig([
     treeshake: true,
     noExternal: ["vis-timeline"],
     outDir: "dist",
+    target: "es2020",
+    // Ensure proper ESM output
+    platform: "browser",
   },
   // CJS build with named exports only to avoid warning
   {
@@ -23,6 +26,10 @@ export default defineConfig([
     noExternal: ["vis-timeline"],
     outDir: "dist",
     outExtension: () => ({ js: ".cjs" }),
+    // Ensure proper CJS exports
+    cjsInterop: true,
+    target: "node14",
+    platform: "node",
   },
   // IIFE build with only ChronosTimeline as global
   {
@@ -35,5 +42,7 @@ export default defineConfig([
     globalName: "ChronosTimeline",
     outDir: "dist",
     outExtension: () => ({ js: ".global.js" }),
+    target: "es2020",
+    platform: "browser",
   },
 ]);

@@ -10,8 +10,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/cjs-entry.cjs"
+      "require": "./dist/cjs-entry.cjs",
+      "default": "./dist/index.js"
     },
+    "./package.json": "./package.json",
     "./global": "./dist/iife-entry.global.js"
   },
   "files": [

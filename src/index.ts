@@ -10,7 +10,7 @@ import { CHRONOS_DEFAULT_CSS } from "./ui/defaultStyles";
 
 // Import version from package.json
 // @ts-ignore
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json";
 
 function parseChronos(
   source: string,

@@ -11,7 +11,7 @@ import { CHRONOS_DEFAULT_CSS } from "./ui/defaultStyles";
 
 // Import version from package.json
 // @ts-ignore
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json";
 
 function parseChronos(
   source: string,
@@ -150,6 +150,11 @@ function scopeCssForRootClass(cssText: string, rootClass: string) {
 // Add version to ChronosTimeline class
 ChronosTimeline.version = pkg.version;
 
+// Import additional exports for re-export
+import * as parser from "./parser";
+import * as ui from "./ui";
+import * as utils from "./utils";
+
 export type {
   ParseResult,
   ChronosDataItem,
@@ -165,6 +170,7 @@ export type {
 export { ChronosTimeline, parseChronos, renderChronos, attachChronosStyles };
 
 // Grouped re-exports for a cleaner public API surface
-export * as parser from "./parser";
-export * as ui from "./ui";
-export * as utils from "./utils";
+export { parser, ui, utils };
+
+// Export everything as named exports (CJS build will handle module.exports automatically)
+// The tsup CJS build will properly convert these to CommonJS exports
