@@ -1626,25 +1626,39 @@
         let historyIndex = -1;
         const MAX_HISTORY = 50;
 
-        // URL state management
-        function updateURL() {
+        // Build a shareable URL (does NOT modify history)
+        function buildShareableUrl() {
           const content = markdownInput.value;
           const locale = localeSelect.value;
-          const url = new URL(window.location);
 
-          if (content.trim()) {
-            url.searchParams.set("content", content);
-          } else {
-            url.searchParams.delete("content");
+          // Start from the current origin+pathname and build query params fresh
+          const url = new URL(window.location);
+          url.search = "";
+
+          // If content is present, always attempt to compress it for shorter URLs.
+          if (content && content.trim()) {
+            try {
+              const raw = content;
+              if (window.LZString && LZString.compressToEncodedURIComponent) {
+                const compressed = LZString.compressToEncodedURIComponent(raw);
+                // Use compressed value (assume compression is desired)
+                url.searchParams.set("content", compressed);
+                url.searchParams.set("c", "1");
+              } else {
+                // LZString not available yet; fall back to raw
+                url.searchParams.set("content", raw);
+              }
+            } catch (e) {
+              // On any error, fall back to raw content
+              url.searchParams.set("content", content);
+            }
           }
 
           if (locale && locale !== "en") {
             url.searchParams.set("locale", locale);
-          } else {
-            url.searchParams.delete("locale");
           }
 
-          window.history.replaceState({}, "", url);
+          return url.toString();
         }
 
         function loadFromURL() {
@@ -1655,6 +1669,7 @@
             const urlParams = new URLSearchParams(queryString);
             const content = urlParams.get("content");
             const locale = urlParams.get("locale");
+            const compressedFlag = urlParams.get("c");
             let hasContent = false;
 
             // Load locale if present
@@ -1669,8 +1684,31 @@
 
             // Load content if present
             if (content) {
-              markdownInput.value = content;
-              hasContent = true;
+              try {
+                if (
+                  compressedFlag === "1" &&
+                  window.LZString &&
+                  LZString.decompressFromEncodedURIComponent
+                ) {
+                  const decompressed =
+                    LZString.decompressFromEncodedURIComponent(content);
+                  if (decompressed != null) {
+                    markdownInput.value = decompressed;
+                    hasContent = true;
+                  } else {
+                    // Fallback to raw if decompression fails
+                    markdownInput.value = content;
+                    hasContent = true;
+                  }
+                } else {
+                  markdownInput.value = content;
+                  hasContent = true;
+                }
+              } catch (e) {
+                console.error("Decompression failed, using raw content:", e);
+                markdownInput.value = content;
+                hasContent = true;
+              }
             }
 
             return hasContent;
@@ -1713,7 +1751,7 @@
             historyIndex--;
             const previousContent = history[historyIndex];
             markdownInput.value = previousContent;
-            updateURL();
+            // Do not update the browser URL on undo
             renderTimeline();
             updateSyntaxHighlighting();
             return true;
@@ -1726,7 +1764,7 @@
             historyIndex++;
             const nextContent = history[historyIndex];
             markdownInput.value = nextContent;
-            updateURL();
+            // Do not update the browser URL on redo
             renderTimeline();
             updateSyntaxHighlighting();
             return true;
@@ -2017,9 +2055,8 @@
           markdownInput.focus();
           markdownInput.setSelectionRange(newCursorPosition, newCursorPosition);
 
-          // Reset dropdown and update
+          // Reset dropdown. Do not update the browser URL here; user can click Share to generate a URL snapshot.
           snippetsSelect.value = "";
-          updateURL();
           renderTimeline();
           updateSyntaxHighlighting();
         }
@@ -2043,7 +2080,7 @@
           if (example) {
             addToHistory(markdownInput.value);
             markdownInput.value = example.content;
-            updateURL(); // Update URL when example is inserted
+            // Do not update the browser URL when inserting examples; user can click Share to generate a URL.
             renderTimeline();
             updateSyntaxHighlighting();
           }
@@ -2141,7 +2178,7 @@
 
         function debouncedURLUpdate() {
           clearTimeout(debounceTimer);
-          updateURL();
+          // Do not update the browser URL on every input; sharing is explicit.
           // Update syntax highlighting immediately for instant feedback
           updateSyntaxHighlighting();
           // Debounce the timeline rendering to avoid performance issues
@@ -2197,7 +2234,7 @@
 
         // Handle locale changes
         function handleLocaleChange() {
-          updateURL();
+          // Locale change should not immediately modify the browser URL.
           renderTimeline();
         }
 
@@ -2282,10 +2319,8 @@
         // Share Link functionality
         function shareLink() {
           try {
-            // Ensure URL is up to date with current content
-            updateURL();
-
-            const currentUrl = window.location.href;
+            // Build a snapshot shareable URL (does not modify current history)
+            const currentUrl = buildShareableUrl();
 
             // Try to use the Clipboard API if available
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2372,9 +2407,6 @@
         }
         addToHistory(markdownInput.value);
         lastContent = markdownInput.value;
-
-        // Ensure URL reflects current state
-        updateURL();
         renderTimeline();
         updateSyntaxHighlighting();
 
@@ -2393,6 +2425,9 @@
       // Start the application
       loadChronos();
     </script>
+
+    <!-- LZ-String for client-side compression of shared content -->
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
 
     <!-- Goatcounter-->
     <script

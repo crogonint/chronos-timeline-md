@@ -76,7 +76,7 @@ export const CHRONOS_DEFAULT_CSS = `
 }
 
 .vis-timeline {
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 0;
   cursor: default;
 }
@@ -213,6 +213,10 @@ export const CHRONOS_DEFAULT_CSS = `
 .chronos-timeline-container .vis-foreground > .vis-group,
 .chronos-timeline-container .vis-labelset > .vis-label {
   border-bottom-color: var(--chronos-border);
+}
+
+.chronos-timeline-container .vis-label {
+  color: var(--chronos-text-muted);
 }
 
 [data-theme="light"],
