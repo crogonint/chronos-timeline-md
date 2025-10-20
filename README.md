@@ -23,21 +23,26 @@ Powered by [vis.js](https://visjs.org/)
 
 ## Installation
 
-### NPM
+### npm
 
-```bash
+```sh
 npm install chronos-timeline-md
 ```
 
-### CDN
+```js
+import { ChronosTimeline } from "chronos-timeline-md";
+```
+
+### CDN (Browser)
 
 ```html
+<!-- inside <head> -->
 <script src="https://unpkg.com/chronos-timeline-md@latest/dist/iife-entry.global.js"></script>
 ```
 
 ## Quick Start
 
-### Method 1: Static Function (ES Modules)
+### Method 1: Static Function
 
 ```typescript
 import { ChronosTimeline } from "chronos-timeline-md";
@@ -56,7 +61,7 @@ ChronosTimeline.render(
 );
 ```
 
-### Method 2: Constructor API (ES Modules)
+### Method 2: Constructor API
 
 ```typescript
 import { ChronosTimeline } from "chronos-timeline-md";
@@ -68,7 +73,7 @@ const timeline = new ChronosTimeline({
 timeline.render(markdownSource);
 ```
 
-### Method 3: Browser (CDN)
+### Browser example (CDN)
 
 ```html
 <!DOCTYPE html>
