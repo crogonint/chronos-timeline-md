@@ -75,24 +75,24 @@ export const CHRONOS_DEFAULT_CSS = `
   color: var(--chronos-text-normal);
 }
 
-.vis-timeline {
+.chronos-timeline-container .vis-timeline {
   border: 1px solid transparent;
   border-radius: 0;
   cursor: default;
 }
 
-.vis-timeline.vis-active {
+.chronos-timeline-container .vis-timeline.vis-active {
   border-color: var(--chronos-border-active);
   border-radius: 0;
 }
 
-.vis-label {
+.chronos-timeline-container .vis-label {
   color: var(--chronos-text-muted);
 }
 
-.vis-custom-time,
-.vis-custom-time-marker {
-  color: var(--chronos-text-on-accent);
+.chronos-timeline-container .vis-custom-time,
+.chronos-timeline-container .vis-custom-time-marker {
+  color: var(--chronos-bg-secondary);
   background-color: var(--chronos-text-normal);
 }
 

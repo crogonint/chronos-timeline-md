@@ -132,6 +132,33 @@ new ChronosTimeline(container, settings?)
 - `ChronosTimeline.templates` - Built-in templates
 - `ChronosTimeline.cheatsheet` - Syntax reference
 
+### Callbacks
+
+Chronos will exposes a small set of optional callbacks that hosts can provide when constructing a timeline instance. Callbacks are passed either via the `callbacks` property on `ChronosTimeline`'s constructor object or via `CoreParseOptions.callbacks` when using the lower-level parse/render functions.
+
+Currently available callbacks:
+
+#### `setTooltip?: (el: Element, text: string) => void`
+
+- Purpose: Allow the host application to take control of how tooltips are displayed. Chronos calls this for timeline items, custom markers, and UI helper buttons (for example the "Fit all" refit button).
+- When called: Chronos calls this callback with a target DOM element and the formatted tooltip text whenever a tooltip should be shown.
+- Default behaviour: If you don't provide `setTooltip`, Chronos falls back to a simple implementation that sets the element's `title` attribute (so native browser tooltips appear). The default is intentionally minimal so the library remains portable across environments.
+- Example (basic):
+
+  ```ts
+  const timeline = new ChronosTimeline({
+    container: document.getElementById("timeline-container"),
+    settings: { selectedLocale: "en" },
+    callbacks: {
+      setTooltip: (el, text) => {
+        // Use a custom tooltip library, or set a data attribute
+        // Example using tippy.js:
+        tippy(el, { content: text, placement: "top" });
+      },
+    },
+  });
+  ```
+
 ### Core Functions
 
 ```typescript

@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chronos Timeline Markdown Playground</title>
+    <meta
+      name="description"
+      content="Generate interactive timelines from simple, shareable text"
+    />
 
     <!-- Include highlight.js for syntax highlighting -->
     <link
@@ -134,6 +138,10 @@
         padding: 0.2rem 0.4rem;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 3px;
+      }
+
+      .header-subtitle-section {
+        display: inline-block;
       }
 
       .theme-toggle {
@@ -689,6 +697,10 @@
           flex-wrap: wrap;
         }
 
+        .header-subtitle-section {
+          display: block;
+        }
+
         .header-version {
           order: -1;
           margin-bottom: 0.5rem;
@@ -956,23 +968,41 @@
         <span id="header-version" class="header-version">Loading...</span>
       </div>
       <h1>Chronos Timeline Markdown Playground</h1>
-      <p>
-        Generate interactive timelines from simple, shareable text. See
-        <a
-          href="https://github.com/clairefro/chronos-timeline-md/blob/main/CHRONOS_SYNTAX_GUIDE.md"
-          target="_blank"
-          rel="nofollow noreferrer"
-          >docs</a
-        >. Powered by
-        <a href="https://visjs.org/" target="_blank" rel="nofollow noreferrer"
-          >vis-timeline</a
-        >
-      </p>
+      <div class="header-subtitle-section">
+        <p>Generate interactive timelines from simple, shareable text</p>
+        <p></p>
+      </div>
+
+      <div class="header-subtitle-section">
+        <p>
+          <a
+            href="https://github.com/clairefro/chronos-timeline-md/blob/main/CHRONOS_SYNTAX_GUIDE.md"
+            target="_blank"
+            rel="nofollow noreferrer"
+            >Syntax</a
+          >
+          |
+          <a
+            href="https://github.com/clairefro/chronos-timeline-md/"
+            target="_blank"
+            rel="nofollow noreferrer"
+            >Developers</a
+          >
+          |
+          <a
+            href="https://obsidian.md/plugins?search=chronos+timeline"
+            target="_blank"
+            rel="nofollow noreferrer"
+            >Obsidian Plugin</a
+          >
+        </p>
+        <p></p>
+      </div>
     </div>
 
     <div class="container">
       <div class="input-panel">
-        <div class="panel-header">Edit Markdown Input</div>
+        <div class="panel-header">Edit Markdown</div>
         <div class="controls">
           <div class="control-group">
             <select id="examples-select">
@@ -1440,10 +1470,6 @@
           document.title = `Chronos Timeline v${ChronosTimeline.version} - Markdown Playground`;
 
           // Update the header subtitle to include version
-          const headerP = document.querySelector(".header p");
-          if (headerP) {
-            headerP.innerHTML = `Generate interactive timelines from simple, shareable text. See <a href="https://github.com/clairefro/chronos-timeline-md/blob/main/CHRONOS_SYNTAX_GUIDE.md" target="_blank" rel="nofollow noreferrer">docs</a>. Powered by <a href="https://visjs.org/" target="_blank" rel="nofollow noreferrer">vis-timeline</a>`;
-          }
         } else {
           console.warn("ChronosTimeline.version not available");
           // Update fallback version
