@@ -6,6 +6,23 @@ export const orderFunctionBuilder: (
   flags: Flags
 ) => TimelineOptionsComparisonFunction = (flags: Flags) => {
   return (a: ChronosDataItem, b: ChronosDataItem) => {
+    // CRITICAL FIX: Sort by type FIRST to maintain stacking hierarchy
+    // Type priority: background (Periods) < point < range/box (Events)
+    const typeOrder: Record<string, number> = {
+      'background': 0,  // Periods go to back
+      'point': 1,       // Points in middle
+      'range': 2,       // Events in front
+      'box': 2          // Single-date events treated same as ranges
+    };
+    
+    const aType = typeOrder[a.type as string] ?? 999;
+    const bType = typeOrder[b.type as string] ?? 999;
+    
+    if (aType !== bType) {
+      return aType - bType;  // Lower numbers render first (behind)
+    }
+    
+    // Within same type, use user-specified ordering
     if (!flags.orderBy) return 0;
 
     for (let ordering of orderByFlagParser(flags.orderBy)) {
